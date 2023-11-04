@@ -1,21 +1,21 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import TinderCard  from 'react-tinder-card'
 import "./TinderCards.css"
+import database from './Firebase'
+import { onSnapshot, collection, query } from "firebase/firestore"
 
 function TinderCards() {
 
-  const [people, setPeople] = useState([
-    {
-        name: "steve jobs",
-        url: 'https://hips.hearstapps.com/hmg-prod/images/apple-ceo-steve-jobs-speaks-during-an-apple-special-event-news-photo-1683661736.jpg?crop=0.800xw:0.563xh;0.0657xw,0.0147xh&resize=1200:*'
-    },
-    {
-        name: 'mark zukerberg',
-        url: 'https://cdn.futura-sciences.com/buildsv6/images/largeoriginal/3/6/0/36006517b2_50166642_mz.jpg'
-    }
-  ]);
+  const [people, setPeople] = useState([]);
 
+  // Piece of code which runs based on a condition
+  useEffect(() => {
+    const q = query(collection(database, 'people'));
+    onSnapshot(q, (querySnapshot) => {
+        setPeople(querySnapshot.docs.map(doc => doc.data()))
+    })
+  }, [])
   
   return (
     <div>
