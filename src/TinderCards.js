@@ -12,9 +12,14 @@ function TinderCards() {
   // Piece of code which runs based on a condition
   useEffect(() => {
     const q = query(collection(database, 'people'));
-    onSnapshot(q, (querySnapshot) => {
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
         setPeople(querySnapshot.docs.map(doc => doc.data()))
     })
+
+    return () => {
+        // this is the cleanup
+        unsubscribe();
+    }
   }, [])
   
   return (
